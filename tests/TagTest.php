@@ -1,8 +1,23 @@
 <?php
+/**
+* @backupGlobals disabled
+* @backupStaticAttributes disabled
+*/
+
 require_once 'src/Tag.php';
+
+$server = 'mysql:host=localhost:8889;dbname=blog_test';
+$username = 'root';
+$password = 'root';
+$DB = new PDO($server, $username, $password);
 
 class TagTest extends PHPUnit_Framework_TestCase
 {
+    protected function tearDown()
+    {
+        Tag::deleteAll();
+    }
+
     function test_getId()
     {
         $name = 'Travel';
@@ -42,6 +57,55 @@ class TagTest extends PHPUnit_Framework_TestCase
 
         //Assert
         $this->assertEquals('Work', $result);
+    }
+
+    function test_save()
+    {
+        //Arrange
+        $name = 'Travel';
+        $test_Tag = new Tag($name);
+
+        //Act
+        $test_Tag->save();
+        $result = Tag::getAll();
+
+        //Assert
+        $this->assertEquals([$test_Tag], $result);
+    }
+
+    function test_getAll()
+    {
+        //Arrange
+        $name1 = 'Travel';
+        $name2 = 'Work';
+        $test_Tag1 = new Tag($name1);
+        $test_Tag1->save();
+        $test_Tag2 = new Tag($name2);
+        $test_Tag2->save();
+
+        //Act
+        $result = Tag::getAll();
+
+        //Assert
+        $this->assertEquals([$test_Tag1, $test_Tag2], $result);
+    }
+
+    function test_deleteAll()
+    {
+        //Arrange
+        $name1 = 'Travel';
+        $name2 = 'Work';
+        $test_Tag1 = new Tag($name1);
+        $test_Tag1->save();
+        $test_Tag2 = new Tag($name2);
+        $test_Tag2->save();
+
+        //Act
+        Tag::deleteAll();
+        $result = Tag::getAll();
+
+        //Assert
+        $this->assertEquals([], $result);
     }
 }
 ?>
