@@ -40,6 +40,7 @@ class Tag
     function delete()
     {
         $GLOBALS['DB']->exec("DELETE FROM tags WHERE id = {$this->getId()};");
+        $GLOBALS['DB']->exec("DELETE FROM posts_tags WHERE tag_id = {$this->getId()};");
     }
 
     function addPost($post)

@@ -207,5 +207,29 @@ class TagTest extends PHPUnit_Framework_TestCase
         //Assert
         $this->assertEquals([$test_Post, $test_Post2], $result);
     }
+
+    function test_delete_posts()
+    {
+        //Arrange
+        $name1 = 'Travel';
+        $test_Tag1 = new Tag($name1);
+        $test_Tag1->save();
+        $name2 = 'Work';
+        $test_Tag2 = new Tag($name2);
+        $test_Tag2->save();
+
+        $text = 'Hello world!';
+        $test_Post = new Post($text);
+        $test_Post->save();
+        $test_Post->addTag($test_Tag1);
+        $test_Post->addTag($test_Tag2);
+
+        //Act
+        $test_Tag1->delete();
+        $result = $test_Post->getTags();
+
+        //Assert
+        $this->assertEquals([$test_Tag2], $result);
+    }
 }
 ?>
