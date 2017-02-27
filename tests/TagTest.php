@@ -5,6 +5,7 @@
 */
 
 require_once 'src/Tag.php';
+require_once 'src/Post.php';
 
 $server = 'mysql:host=localhost:8889;dbname=blog_test';
 $username = 'root';
@@ -16,6 +17,7 @@ class TagTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         Tag::deleteAll();
+        Post::deleteAll();
     }
 
     function test_getId()
@@ -157,6 +159,53 @@ class TagTest extends PHPUnit_Framework_TestCase
 
         //Assert
         $this->assertEquals([$test_Tag2], $result);
+    }
+
+    function test_addPost()
+    {
+        //Arrange
+        $name = 'Travel';
+        $test_Tag = new Tag($name);
+        $test_Tag->save();
+
+        $text = 'Hello world!';
+        $test_Post = new Post($text);
+        $test_Post->save();
+
+        $text2 = 'Goodbye world!';
+        $test_Post2 = new Post($text2);
+        $test_Post2->save();
+
+        //Act
+        $test_Tag->addPost($test_Post);
+        $result = $test_Tag->getPosts();
+
+        //Assert
+        $this->assertEquals([$test_Post], $result);
+    }
+
+    function test_getPosts()
+    {
+        //Arrange
+        $name = 'Travel';
+        $test_Tag = new Tag($name);
+        $test_Tag->save();
+
+        $text = 'Hello world!';
+        $test_Post = new Post($text);
+        $test_Post->save();
+
+        $text2 = 'Goodbye world!';
+        $test_Post2 = new Post($text2);
+        $test_Post2->save();
+
+        //Act
+        $test_Tag->addPost($test_Post);
+        $test_Tag->addPost($test_Post2);
+        $result = $test_Tag->getPosts();
+
+        //Assert
+        $this->assertEquals([$test_Post, $test_Post2], $result);
     }
 }
 ?>
