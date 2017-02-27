@@ -24,5 +24,29 @@ class Post
     {
         $this->text = $new_text;
     }
+
+    function save()
+    {
+        $GLOBALS['DB']->exec("INSERT INTO posts (text) VALUES ('{$this->getText()}');");
+        $this->id = $GLOBALS['DB']->lastInsertId();
+    }
+
+    static function getAll()
+    {
+        $posts = [];
+        $queried_posts = $GLOBALS['DB']->query('SELECT * FROM posts;');
+        foreach ($queried_posts as $post) {
+            $id = $post['id'];
+            $text = $post['text'];
+            $new_post = new Post($text, $id);
+            array_push($posts, $new_post);
+        }
+        return $posts;
+    }
+
+    static function deleteAll()
+    {
+        $GLOBALS['DB']->exec('DELETE FROM posts');
+    }
 }
 ?>
