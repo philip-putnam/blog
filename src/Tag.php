@@ -37,6 +37,11 @@ class Tag
         $this->setName($new_name);
     }
 
+    function delete()
+    {
+        $GLOBALS['DB']->exec("DELETE FROM tags WHERE id = {$this->getId()};");
+    }
+
     static function getAll()
     {
         $tags = [];
