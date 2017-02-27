@@ -141,5 +141,23 @@ class PostTest extends PHPUnit_Framework_TestCase
         //Assert
         $this->assertEquals('Goodbye world!', $result);
     }
+
+    function test_delete()
+    {
+        //Arrange
+        $text1 = 'Hello world!';
+        $text2 = 'Goodbye world!';
+        $test_Post1 = new Post($text1);
+        $test_Post1->save();
+        $test_Post2 = new Post($text2);
+        $test_Post2->save();
+
+        //Act
+        $test_Post1->delete();
+        $result = Post::getAll();
+
+        //Assert
+        $this->assertEquals([$test_Post2], $result);
+    }
 }
 ?>

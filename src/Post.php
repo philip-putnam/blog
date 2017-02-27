@@ -37,6 +37,11 @@ class Post
         $this->setText($new_text);
     }
 
+    function delete()
+    {
+        $GLOBALS['DB']->exec("DELETE FROM posts WHERE id = {$this->getId()};");
+    }
+
     static function getAll()
     {
         $posts = [];
