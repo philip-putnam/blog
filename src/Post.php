@@ -42,6 +42,30 @@ class Post
         $GLOBALS['DB']->exec("DELETE FROM posts WHERE id = {$this->getId()};");
     }
 
+    function addTag($tag)
+    {
+        $GLOBALS['DB']->exec("INSERT INTO posts_tags (post_id, tag_id) VALUES ({$this->getId()}, {$tag->getId()});");
+    }
+
+    function getTags()
+    {
+        $query = $GLOBALS['DB']->query("SELECT tag_id FROM posts_tags WHERE post_id = {$this->getId()};");
+        $tag_ids = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        $tags = [];
+        foreach($tag_ids as $id) {
+            $tag_id = $id['tag_id'];
+            $result = $GLOBALS['DB']->query("SELECT * FROM tags WHERE id = {$tag_id};");
+            $returned_tag = $result->fetchAll(PDO::FETCH_ASSOC);
+
+            $id = $returned_tag[0]['id'];
+            $name = $returned_tag[0]['name'];
+            $new_tag = new Tag($name, $id);
+            array_push($tags, $new_tag);
+        }
+        return $tags;
+    }
+
     static function getAll()
     {
         $posts = [];
