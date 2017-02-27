@@ -48,5 +48,17 @@ class Post
     {
         $GLOBALS['DB']->exec('DELETE FROM posts');
     }
+
+    static function find($search_id)
+    {
+        $found_post = null;
+        $posts = Post::getAll();
+        foreach ($posts as $post) {
+            $post_id = $post->getId();
+            if ($post_id == $search_id)
+                $found_post = $post;
+        }
+        return $found_post;
+    }
 }
 ?>
