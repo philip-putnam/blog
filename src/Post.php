@@ -31,6 +31,12 @@ class Post
         $this->id = $GLOBALS['DB']->lastInsertId();
     }
 
+    function update($new_text)
+    {
+        $GLOBALS['DB']->exec("UPDATE posts SET text = '{$new_text}' WHERE id = {$this->getId()};");
+        $this->setText($new_text);
+    }
+
     static function getAll()
     {
         $posts = [];
