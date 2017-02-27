@@ -31,6 +31,12 @@ class Tag
         $this->id = $GLOBALS['DB']->lastInsertId();
     }
 
+    function update($new_name)
+    {
+        $GLOBALS['DB']->exec("UPDATE tags SET name = '{$new_name}' WHERE id = {$this->getId()};");
+        $this->setName($new_name);
+    }
+
     static function getAll()
     {
         $tags = [];
@@ -49,6 +55,19 @@ class Tag
     static function deleteAll()
     {
         $GLOBALS['DB']->exec('DELETE FROM tags;');
+    }
+
+    static function find($search_id)
+    {
+        $found_tag = null;
+        $tags = Tag::getAll();
+        foreach($tags as $tag)
+        {
+            $tag_id = $tag->getId();
+            if ($tag_id == $search_id)
+                $found_tag = $tag;
+        }
+        return $found_tag;
     }
 }
 ?>

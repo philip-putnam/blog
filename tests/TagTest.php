@@ -107,5 +107,38 @@ class TagTest extends PHPUnit_Framework_TestCase
         //Assert
         $this->assertEquals([], $result);
     }
+
+    function test_find()
+    {
+        //Arrange
+        $name1 = 'Travel';
+        $name2 = 'Work';
+        $test_Tag1 = new Tag($name1);
+        $test_Tag1->save();
+        $test_Tag2 = new Tag($name2);
+        $test_Tag2->save();
+
+        //Act
+        $result = Tag::find($test_Tag1->getId());
+
+        //Assert
+        $this->assertEquals($test_Tag1, $result);
+    }
+
+    function test_update()
+    {
+        //Arrange
+        $name = 'Travel';
+        $new_name = 'Work';
+        $test_Tag = new Tag($name);
+        $test_Tag->save();
+
+        //Act
+        $test_Tag->update($new_name);
+        $result = $test_Tag->getName();
+
+        //Assert
+        $this->assertEquals('Work', $result);
+    }
 }
 ?>
